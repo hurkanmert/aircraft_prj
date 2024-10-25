@@ -67,7 +67,7 @@ $(document).ready(function () {
                             '<td>' + kanat.uretim_tarihi + '</td>' +
                             '<td>' + kanat.status + '</td>' +
                             '<td>' +
-                            '<button class="btn btn-danger geri-donusum" data-kanat-id="' + kanat.id + '" id="geri-donusum-' + kanat.id + '">' +
+                            '<button class="btn btn-danger geri-donusum" data-kanat-id="' + kanat.id + '" data-kanat-status="' + kanat.status + '" id="geri-donusum-' + kanat.id + '">' +
                             'Geri Dönüşüm</button>' +
                             '</td>' +
                             '</tr>'
@@ -105,41 +105,49 @@ $(document).ready(function () {
                     // Geri Dönüşüm butonuna tıklama işlemi
                     $('.geri-donusum').click(function () {
                         var kanatId = $(this).data('kanat-id');  // Silinecek kanatın ID'sini al
+                        var kanatStatus = $(this).data('kanat-status');
 
-                        if (confirm("Bu kanadı silmek istediğinize emin misiniz?")) {
-                            $.ajax({
-                                url: kanatSilAjaxUrl,  // Silme işlemi için URL
-                                type: 'POST',
-                                data: {
-                                    'kanat_id': kanatId,
-                                    'ucak_adi': ucakAdi,
-                                    'csrfmiddlewaretoken': '{{ csrf_token }}'  // CSRF token
-                                },
-                                success: function (response) {
-                                    // Silme işlemi başarılıysa tabloyu yeniden yükle
-                                    $('#tb2-kanat-sayisi').text("TB2: " + response.new_kanat.TB2 + " Kanat");
-                                    $('#tb3-kanat-sayisi').text("TB3: " + response.new_kanat.TB3 + " Kanat");
-                                    $('#akinci-kanat-sayisi').text("Akıncı: " + response.new_kanat.Akıncı + " Kanat");
-                                    $('#kizilelma-kanat-sayisi').text("Kızılelma: " + response.new_kanat.Kızılelma + " Kanat");
-
-                                    $('#tb2-k-kanat-sayisi').text("TB2: " + response.k_kanat_sayilari.TB2 + " Kanat");
-                                    $('#tb3-k-kanat-sayisi').text("TB3: " + response.k_kanat_sayilari.TB3 + " Kanat");
-                                    $('#akinci-k-kanat-sayisi').text("Akıncı: " + response.k_kanat_sayilari.Akıncı + " Kanat");
-                                    $('#kizilelma-k-kanat-sayisi').text("Kızılelma: " + response.k_kanat_sayilari.Kızılelma + " Kanat");
-
-                                    $('#tb2-kanat-sayisi').removeClass('list-group-item-danger list-group-item-warning').addClass(response.new_kanat.TB2 < 2 ? 'list-group-item-danger' : (response.new_kanat.TB2 < 3 ? 'list-group-item-warning' : ''));
-                                    $('#tb3-kanat-sayisi').removeClass('list-group-item-danger list-group-item-warning').addClass(response.new_kanat.TB3 < 2 ? 'list-group-item-danger' : (response.new_kanat.TB3 < 3 ? 'list-group-item-warning' : ''));
-                                    $('#akinci-kanat-sayisi').removeClass('list-group-item-danger list-group-item-warning').addClass(response.new_kanat.Akıncı < 2 ? 'list-group-item-danger' : (response.new_kanat.Akıncı < 3 ? 'list-group-item-warning' : ''));
-                                    $('#kizilelma-kanat-sayisi').removeClass('list-group-item-danger list-group-item-warning').addClass(response.new_kanat.Kızılelma < 2 ? 'list-group-item-danger' : (response.new_kanat.Kızılelma < 3 ? 'list-group-item-warning' : ''));
-                    
-                                    loadKanatlar(data.current_page, ucakAdi);
-
-                                },
-                                error: function (xhr, status, error) {
-                                    alert("Silme işlemi sırasında bir hata oluştu.");
-                                }
-                            });
+                        if ( kanatStatus === 'kullanimda'){
+                            alert("Yaptığınız işlem doğru değil lütfen bir daha denemeyin !");
                         }
+                        else{
+                            if (confirm("Bu kanadı silmek istediğinize emin misiniz?")) {
+                                $.ajax({
+                                    url: kanatSilAjaxUrl,  // Silme işlemi için URL
+                                    type: 'POST',
+                                    data: {
+                                        'kanat_id': kanatId,
+                                        'ucak_adi': ucakAdi,
+                                        'csrfmiddlewaretoken': '{{ csrf_token }}'  // CSRF token
+                                    },
+                                    success: function (response) {
+                                        // Silme işlemi başarılıysa tabloyu yeniden yükle
+                                        $('#tb2-kanat-sayisi').text("TB2: " + response.new_kanat.TB2 + " Kanat");
+                                        $('#tb3-kanat-sayisi').text("TB3: " + response.new_kanat.TB3 + " Kanat");
+                                        $('#akinci-kanat-sayisi').text("Akıncı: " + response.new_kanat.Akıncı + " Kanat");
+                                        $('#kizilelma-kanat-sayisi').text("Kızılelma: " + response.new_kanat.Kızılelma + " Kanat");
+    
+                                        $('#tb2-k-kanat-sayisi').text("TB2: " + response.k_kanat_sayilari.TB2 + " Kanat");
+                                        $('#tb3-k-kanat-sayisi').text("TB3: " + response.k_kanat_sayilari.TB3 + " Kanat");
+                                        $('#akinci-k-kanat-sayisi').text("Akıncı: " + response.k_kanat_sayilari.Akıncı + " Kanat");
+                                        $('#kizilelma-k-kanat-sayisi').text("Kızılelma: " + response.k_kanat_sayilari.Kızılelma + " Kanat");
+    
+                                        $('#tb2-kanat-sayisi').removeClass('list-group-item-danger list-group-item-warning').addClass(response.new_kanat.TB2 < 2 ? 'list-group-item-danger' : (response.new_kanat.TB2 < 3 ? 'list-group-item-warning' : ''));
+                                        $('#tb3-kanat-sayisi').removeClass('list-group-item-danger list-group-item-warning').addClass(response.new_kanat.TB3 < 2 ? 'list-group-item-danger' : (response.new_kanat.TB3 < 3 ? 'list-group-item-warning' : ''));
+                                        $('#akinci-kanat-sayisi').removeClass('list-group-item-danger list-group-item-warning').addClass(response.new_kanat.Akıncı < 2 ? 'list-group-item-danger' : (response.new_kanat.Akıncı < 3 ? 'list-group-item-warning' : ''));
+                                        $('#kizilelma-kanat-sayisi').removeClass('list-group-item-danger list-group-item-warning').addClass(response.new_kanat.Kızılelma < 2 ? 'list-group-item-danger' : (response.new_kanat.Kızılelma < 3 ? 'list-group-item-warning' : ''));
+                        
+                                        loadKanatlar(data.current_page, ucakAdi);
+    
+                                    },
+                                    error: function (xhr, status, error) {
+                                        alert("Silme işlemi sırasında bir hata oluştu.");
+                                    }
+                                });
+                            }
+                        }
+
+                        
                     });
                 }
             });

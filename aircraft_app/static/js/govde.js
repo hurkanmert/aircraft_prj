@@ -67,7 +67,7 @@ $(document).ready(function () {
                             '<td>' + govde.uretim_tarihi + '</td>' +
                             '<td>' + govde.status + '</td>' +
                             '<td>' +
-                            '<button class="btn btn-danger geri-donusum" data-govde-id="' + govde.id + '" id="geri-donusum-' + govde.id + '">' +
+                            '<button class="btn btn-danger geri-donusum" data-govde-id="' + govde.id + '" data-govde-status="' + govde.status + '" id="geri-donusum-' + govde.id + '">' +
                             'Geri Dönüşüm</button>' +
                             '</td>' +
                             '</tr>'
@@ -102,41 +102,48 @@ $(document).ready(function () {
                     // Geri Dönüşüm butonuna tıklama işlemi
                     $('.geri-donusum').click(function () {
                         var govdeId = $(this).data('govde-id');  // Silinecek gövdenin ID'sini al
+                        var govdeStatus = $(this).data('govde-status');
 
-                        if (confirm("Bu kanadı silmek istediğinize emin misiniz?")) {
-                            $.ajax({
-                                url: govdeSilUrl,  // Silme işlemi için URL
-                                type: 'POST',
-                                data: {
-                                    'govde_id': govdeId,
-                                    'ucak_adi': ucakAdi,
-                                    'csrfmiddlewaretoken': '{{ csrf_token }}'  // CSRF token
-                                },
-                                success: function (response) {
-                                    // Silme işlemi başarılıysa tabloyu yeniden yükle
-                                    $('#tb2-govde-sayisi').text("TB2: " + response.new_govde.TB2 + " Gövde");
-                                    $('#tb3-govde-sayisi').text("TB3: " + response.new_govde.TB3 + " Gövde");
-                                    $('#akinci-govde-sayisi').text("Akıncı: " + response.new_govde.Akıncı + " Gövde");
-                                    $('#kizilelma-govde-sayisi').text("Kızılelma: " + response.new_govde.Kızılelma + " Gövde");
-
-                                    $('#tb2-k-govde-sayisi').text("TB2: " + response.k_govde_sayilari.TB2 + " Gövde");
-                                    $('#tb3-k-govde-sayisi').text("TB3: " + response.k_govde_sayilari.TB3 + " Gövde");
-                                    $('#akinci-k-govde-sayisi').text("Akıncı: " + response.k_govde_sayilari.Akıncı + " Gövde");
-                                    $('#kizilelma-k-govde-sayisi').text("Kızılelma: " + response.k_govde_sayilari.Kızılelma + " Gövde");
-
-                                    $('#tb2-govde-sayisi').addClass(response.new_govde.TB2 < 2 ? 'list-group-item-danger' : (response.new_govde.TB2 < 3 ? 'list-group-item-warning' : ''));
-                                    $('#tb3-govde-sayisi').addClass(response.new_govde.TB3 < 2 ? 'list-group-item-danger' : (response.new_govde.TB3 < 3 ? 'list-group-item-warning' : ''));
-                                    $('#akinci-govde-sayisi').addClass(response.new_govde.Akıncı < 2 ? 'list-group-item-danger' : (response.new_govde.Akıncı < 3 ? 'list-group-item-warning' : ''));
-                                    $('#kizilelma-govde-sayisi').addClass(response.new_govde.Kızılelma < 2 ? 'list-group-item-danger' : (response.new_govde.Kızılelma < 3 ? 'list-group-item-warning' : ''));
-
-                                    loadGovde(data.current_page, ucakAdi);
-
-                                },
-                                error: function (xhr, status, error) {
-                                    alert("Silme işlemi sırasında bir hata oluştu.");
-                                }
-                            });
+                        if( govdeStatus === 'kullanimda'){
+                            alert("Yaptığınız işlem doğru değil lütfen bir daha denemeyin !");
                         }
+                        else{
+                            if (confirm("Bu kanadı silmek istediğinize emin misiniz?")) {
+                                $.ajax({
+                                    url: govdeSilUrl,  // Silme işlemi için URL
+                                    type: 'POST',
+                                    data: {
+                                        'govde_id': govdeId,
+                                        'ucak_adi': ucakAdi,
+                                        'csrfmiddlewaretoken': '{{ csrf_token }}'  // CSRF token
+                                    },
+                                    success: function (response) {
+                                        // Silme işlemi başarılıysa tabloyu yeniden yükle
+                                        $('#tb2-govde-sayisi').text("TB2: " + response.new_govde.TB2 + " Gövde");
+                                        $('#tb3-govde-sayisi').text("TB3: " + response.new_govde.TB3 + " Gövde");
+                                        $('#akinci-govde-sayisi').text("Akıncı: " + response.new_govde.Akıncı + " Gövde");
+                                        $('#kizilelma-govde-sayisi').text("Kızılelma: " + response.new_govde.Kızılelma + " Gövde");
+    
+                                        $('#tb2-k-govde-sayisi').text("TB2: " + response.k_govde_sayilari.TB2 + " Gövde");
+                                        $('#tb3-k-govde-sayisi').text("TB3: " + response.k_govde_sayilari.TB3 + " Gövde");
+                                        $('#akinci-k-govde-sayisi').text("Akıncı: " + response.k_govde_sayilari.Akıncı + " Gövde");
+                                        $('#kizilelma-k-govde-sayisi').text("Kızılelma: " + response.k_govde_sayilari.Kızılelma + " Gövde");
+    
+                                        $('#tb2-govde-sayisi').addClass(response.new_govde.TB2 < 2 ? 'list-group-item-danger' : (response.new_govde.TB2 < 3 ? 'list-group-item-warning' : ''));
+                                        $('#tb3-govde-sayisi').addClass(response.new_govde.TB3 < 2 ? 'list-group-item-danger' : (response.new_govde.TB3 < 3 ? 'list-group-item-warning' : ''));
+                                        $('#akinci-govde-sayisi').addClass(response.new_govde.Akıncı < 2 ? 'list-group-item-danger' : (response.new_govde.Akıncı < 3 ? 'list-group-item-warning' : ''));
+                                        $('#kizilelma-govde-sayisi').addClass(response.new_govde.Kızılelma < 2 ? 'list-group-item-danger' : (response.new_govde.Kızılelma < 3 ? 'list-group-item-warning' : ''));
+    
+                                        loadGovde(data.current_page, ucakAdi);
+    
+                                    },
+                                    error: function (xhr, status, error) {
+                                        alert("Silme işlemi sırasında bir hata oluştu.");
+                                    }
+                                });
+                            }
+                        }
+
                     });
                 }
             });
