@@ -107,44 +107,59 @@ $(document).ready(function () {
                         var kuyrukId = $(this).data('kuyruk-id');  // Silinecek kanatın ID'sini al
                         var kuyrukStatus = $(this).data('kuyruk-status');
 
-                        if( kuyrukStatus === 'kullanimda'){
+                        if (kuyrukStatus === 'kullanimda') {
                             alert("Yaptığınız işlem doğru değil lütfen bir daha denemeyin !");
                         }
-                        else{
-                            if (confirm("Bu kanadı silmek istediğinize emin misiniz?")) {
-                                $.ajax({
-                                    url: kuyrukSilAjaxUrl,  // Silme işlemi için URL
-                                    type: 'POST',
-                                    data: {
-                                        'kuyruk_id': kuyrukId,
-                                        'ucak_adi': ucakAdi,
-                                        'csrfmiddlewaretoken': '{{ csrf_token }}'  // CSRF token
-                                    },
-                                    success: function (response) {
-                                        // Silme işlemi başarılıysa tabloyu yeniden yükle
-                                        $('#tb2-kuyruk-sayisi').text("TB2: " + response.new_kuyruk.TB2 + " Kuyruk");
-                                        $('#tb3-kuyruk-sayisi').text("TB3: " + response.new_kuyruk.TB3 + " Kuyruk");
-                                        $('#akinci-kuyruk-sayisi').text("Akıncı: " + response.new_kuyruk.Akıncı + " Kuyruk");
-                                        $('#kizilelma-kuyruk-sayisi').text("Kızılelma: " + response.new_kuyruk.Kızılelma + " Kuyruk");
-                                        
-                                        $('#tb2-k-kuyruk-sayisi').text("TB2: " + response.k_kuyruk_sayilari.TB2 + " Kuyruk");
-                                        $('#tb3-k-kuyruk-sayisi').text("TB3: " + response.k_kuyruk_sayilari.TB3 + " Kuyruk");
-                                        $('#akinci-k-kuyruk-sayisi').text("Akıncı: " + response.k_kuyruk_sayilari.Akıncı + " Kuyruk");
-                                        $('#kizilelma-k-kuyruk-sayisi').text("Kızılelma: " + response.k_kuyruk_sayilari.Kızılelma + " Kuyruk");
-    
-                                        $('#tb2-kuyruk-sayisi').removeClass('list-group-item-danger list-group-item-warning').addClass(response.new_kuyruk.TB2 < 2 ? 'list-group-item-danger' : (response.new_kuyruk.TB2 < 3 ? 'list-group-item-warning' : ''));
-                                        $('#tb3-kuyruk-sayisi').removeClass('list-group-item-danger list-group-item-warning').addClass(response.new_kuyruk.TB3 < 2 ? 'list-group-item-danger' : (response.new_kuyruk.TB3 < 3 ? 'list-group-item-warning' : ''));
-                                        $('#akinci-kuyruk-sayisi').removeClass('list-group-item-danger list-group-item-warning').addClass(response.new_kuyruk.Akıncı < 2 ? 'list-group-item-danger' : (response.new_kuyruk.Akıncı < 3 ? 'list-group-item-warning' : ''));
-                                        $('#kizilelma-kuyruk-sayisi').removeClass('list-group-item-danger list-group-item-warning').addClass(response.new_kuyruk.Kızılelma < 2 ? 'list-group-item-danger' : (response.new_kuyruk.Kızılelma < 3 ? 'list-group-item-warning' : ''));
-    
-                                        loadKuyruklar(data.current_page, ucakAdi);
-    
-                                    },
-                                    error: function (xhr, status, error) {
-                                        alert("Silme işlemi sırasında bir hata oluştu.");
-                                    }
+                        else {
+                            $('#deleteConfirmationModal').modal('show');
+                            // Modal kontrol
+                            $('#deleteConfirmationModal').on('shown.bs.modal', function () {
+
+                                $('#closeModal').off('click').on('click', function () {
+                                    $('#deleteConfirmationModal').modal('hide'); // Modal'ı kapat
                                 });
-                            }
+
+                                $('#confirmDeleteButton').off('click').on('click', function () {
+
+
+                                    $.ajax({
+                                        url: kuyrukSilAjaxUrl,  // Silme işlemi için URL
+                                        type: 'POST',
+                                        data: {
+                                            'kuyruk_id': kuyrukId,
+                                            'ucak_adi': ucakAdi,
+                                            'csrfmiddlewaretoken': '{{ csrf_token }}'  // CSRF token
+                                        },
+                                        success: function (response) {
+                                            // Silme işlemi başarılıysa tabloyu yeniden yükle
+                                            $('#tb2-kuyruk-sayisi').text("TB2: " + response.new_kuyruk.TB2 + " Kuyruk");
+                                            $('#tb3-kuyruk-sayisi').text("TB3: " + response.new_kuyruk.TB3 + " Kuyruk");
+                                            $('#akinci-kuyruk-sayisi').text("Akıncı: " + response.new_kuyruk.Akıncı + " Kuyruk");
+                                            $('#kizilelma-kuyruk-sayisi').text("Kızılelma: " + response.new_kuyruk.Kızılelma + " Kuyruk");
+
+                                            $('#tb2-k-kuyruk-sayisi').text("TB2: " + response.k_kuyruk_sayilari.TB2 + " Kuyruk");
+                                            $('#tb3-k-kuyruk-sayisi').text("TB3: " + response.k_kuyruk_sayilari.TB3 + " Kuyruk");
+                                            $('#akinci-k-kuyruk-sayisi').text("Akıncı: " + response.k_kuyruk_sayilari.Akıncı + " Kuyruk");
+                                            $('#kizilelma-k-kuyruk-sayisi').text("Kızılelma: " + response.k_kuyruk_sayilari.Kızılelma + " Kuyruk");
+
+                                            $('#tb2-kuyruk-sayisi').removeClass('list-group-item-danger list-group-item-warning').addClass(response.new_kuyruk.TB2 < 2 ? 'list-group-item-danger' : (response.new_kuyruk.TB2 < 3 ? 'list-group-item-warning' : ''));
+                                            $('#tb3-kuyruk-sayisi').removeClass('list-group-item-danger list-group-item-warning').addClass(response.new_kuyruk.TB3 < 2 ? 'list-group-item-danger' : (response.new_kuyruk.TB3 < 3 ? 'list-group-item-warning' : ''));
+                                            $('#akinci-kuyruk-sayisi').removeClass('list-group-item-danger list-group-item-warning').addClass(response.new_kuyruk.Akıncı < 2 ? 'list-group-item-danger' : (response.new_kuyruk.Akıncı < 3 ? 'list-group-item-warning' : ''));
+                                            $('#kizilelma-kuyruk-sayisi').removeClass('list-group-item-danger list-group-item-warning').addClass(response.new_kuyruk.Kızılelma < 2 ? 'list-group-item-danger' : (response.new_kuyruk.Kızılelma < 3 ? 'list-group-item-warning' : ''));
+
+                                            loadKuyruklar(data.current_page, ucakAdi);
+
+                                        },
+                                        error: function (xhr, status, error) {
+                                            alert("Silme işlemi sırasında bir hata oluştu.");
+                                        }
+                                    });
+                                    $('#deleteConfirmationModal').modal('hide'); // Modal'ı kapat
+                                    kanatId = null;
+                                });
+                            });
+
+
                         }
 
                     });

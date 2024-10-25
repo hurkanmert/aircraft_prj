@@ -19,6 +19,12 @@
     var kuyrukSilAjaxUrl = "{% url 'kuyruk_sil_ajax' %}";
 </script>
 
+<!-- jQuery yükle -->
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<!-- Bootstrap JS yükle -->
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.bundle.min.js"></script>
+
+
 <script src="{% static 'js/kuyruk.js' %}"></script>
 {% endblock %}
 
@@ -111,6 +117,26 @@
     </div>
 </div>
 
+<!-- Silme Onayı için Modal -->
+<div class="modal fade" id="deleteConfirmationModal" tabindex="-1" aria-labelledby="deleteConfirmationLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="deleteConfirmationLabel">Silme Onayı</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                Bu öğeyi silmek istediğinizden emin misiniz?
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" id="closeModal">İptal</button>
+                <button type="button" class="btn btn-danger" id="confirmDeleteButton">Sil</button>
+            </div>
+        </div>
+    </div>
+</div>
 
 <div class="row">
     <div class="col-md-12" style="margin-top: 50px;">

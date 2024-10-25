@@ -108,7 +108,17 @@ $(document).ready(function () {
                             alert("Yaptığınız işlem doğru değil lütfen bir daha denemeyin !");
                         }
                         else{
-                            if (confirm("Bu kanadı silmek istediğinize emin misiniz?")) {
+                            $('#deleteConfirmationModal').modal('show');
+                            // Modal kontrol
+                            $('#deleteConfirmationModal').on('shown.bs.modal', function () {
+
+                                $('#closeModal').off('click').on('click', function () {
+                                    $('#deleteConfirmationModal').modal('hide'); // Modal'ı kapat
+                                });
+
+                                $('#confirmDeleteButton').off('click').on('click', function () {
+
+
                                 $.ajax({
                                     url: govdeSilUrl,  // Silme işlemi için URL
                                     type: 'POST',
@@ -141,7 +151,11 @@ $(document).ready(function () {
                                         alert("Silme işlemi sırasında bir hata oluştu.");
                                     }
                                 });
-                            }
+                                $('#deleteConfirmationModal').modal('hide'); // Modal'ı kapat
+                                kanatId = null;
+                            });
+                        });
+
                         }
 
                     });

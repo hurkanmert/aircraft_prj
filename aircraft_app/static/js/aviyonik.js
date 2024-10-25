@@ -104,44 +104,60 @@ $(document).ready(function () {
                         var aviyonikId = $(this).data('aviyonik-id');  // Silinecek aviyoniğin ID'sini al
                         var aviyonikStatus = $(this).data('aviyonik-status');
 
-                        if( aviyonikStatus === 'kullanimda'){
+                        if (aviyonikStatus === 'kullanimda') {
                             alert("Yaptığınız işlem doğru değil lütfen bir daha denemeyin !");
                         }
-                        else{
-                            if (confirm("Bu kanadı silmek istediğinize emin misiniz?")) {
-                                $.ajax({
-                                    url: aviyonikSilAjaxUrl,  // Silme işlemi için URL
-                                    type: 'POST',
-                                    data: {
-                                        'aviyonik_id': aviyonikId,
-                                        'ucak_adi': ucakAdi,
-                                        'csrfmiddlewaretoken': '{{ csrf_token }}'  // CSRF token
-                                    },
-                                    success: function (response) {
-                                        // Silme işlemi başarılıysa tabloyu yeniden yükle
-                                        $('#tb2-aviyonik-sayisi').text("TB2: " + response.new_aviyonik.TB2 + " Aviyonik");
-                                        $('#tb3-aviyonik-sayisi').text("TB3: " + response.new_aviyonik.TB3 + " Aviyonik");
-                                        $('#akinci-aviyonik-sayisi').text("Akıncı: " + response.new_aviyonik.Akıncı + " Aviyonik");
-                                        $('#kizilelma-aviyonik-sayisi').text("Kızılelma: " + response.new_aviyonik.Kızılelma + " Aviyonik");
-    
-                                        $('#tb2-k-aviyonik-sayisi').text("TB2: " + response.k_aviyonik_sayilari.TB2 + " Aviyonik");
-                                        $('#tb3-k-aviyonik-sayisi').text("TB3: " + response.k_aviyonik_sayilari.TB3 + " Aviyonik");
-                                        $('#akinci-k-aviyonik-sayisi').text("Akıncı: " + response.k_aviyonik_sayilari.Akıncı + " Aviyonik");
-                                        $('#kizilelma-k-aviyonik-sayisi').text("Kızılelma: " + response.k_aviyonik_sayilari.Kızılelma + " Aviyonik");
-    
-                                        $('#tb2-aviyonik-sayisi').addClass(response.new_aviyonik.TB2 < 2 ? 'list-group-item-danger' : (response.new_aviyonik.TB2 < 3 ? 'list-group-item-warning' : ''));
-                                        $('#tb3-aviyonik-sayisi').addClass(response.new_aviyonik.TB3 < 2 ? 'list-group-item-danger' : (response.new_aviyonik.TB3 < 3 ? 'list-group-item-warning' : ''));
-                                        $('#akinci-aviyonik-sayisi').addClass(response.new_aviyonik.Akıncı < 2 ? 'list-group-item-danger' : (response.new_aviyonik.Akıncı < 3 ? 'list-group-item-warning' : ''));
-                                        $('#kizilelma-aviyonik-sayisi').addClass(response.new_aviyonik.Kızılelma < 2 ? 'list-group-item-danger' : (response.new_aviyonik.Kızılelma < 3 ? 'list-group-item-warning' : ''));
-                        
-                                        loadAviyonikler(data.current_page, ucakAdi);
-    
-                                    },
-                                    error: function (xhr, status, error) {
-                                        alert("Silme işlemi sırasında bir hata oluştu.");
-                                    }
+                        else {
+                            $('#deleteConfirmationModal').modal('show');
+                            // Modal kontrol
+                            $('#deleteConfirmationModal').on('shown.bs.modal', function () {
+
+                                $('#closeModal').off('click').on('click', function () {
+                                    $('#deleteConfirmationModal').modal('hide'); // Modal'ı kapat
                                 });
-                            }
+
+                                $('#confirmDeleteButton').off('click').on('click', function () {
+
+
+                                    $.ajax({
+                                        url: aviyonikSilAjaxUrl,  // Silme işlemi için URL
+                                        type: 'POST',
+                                        data: {
+                                            'aviyonik_id': aviyonikId,
+                                            'ucak_adi': ucakAdi,
+                                            'csrfmiddlewaretoken': '{{ csrf_token }}'  // CSRF token
+                                        },
+                                        success: function (response) {
+                                            // Silme işlemi başarılıysa tabloyu yeniden yükle
+                                            $('#tb2-aviyonik-sayisi').text("TB2: " + response.new_aviyonik.TB2 + " Aviyonik");
+                                            $('#tb3-aviyonik-sayisi').text("TB3: " + response.new_aviyonik.TB3 + " Aviyonik");
+                                            $('#akinci-aviyonik-sayisi').text("Akıncı: " + response.new_aviyonik.Akıncı + " Aviyonik");
+                                            $('#kizilelma-aviyonik-sayisi').text("Kızılelma: " + response.new_aviyonik.Kızılelma + " Aviyonik");
+
+                                            $('#tb2-k-aviyonik-sayisi').text("TB2: " + response.k_aviyonik_sayilari.TB2 + " Aviyonik");
+                                            $('#tb3-k-aviyonik-sayisi').text("TB3: " + response.k_aviyonik_sayilari.TB3 + " Aviyonik");
+                                            $('#akinci-k-aviyonik-sayisi').text("Akıncı: " + response.k_aviyonik_sayilari.Akıncı + " Aviyonik");
+                                            $('#kizilelma-k-aviyonik-sayisi').text("Kızılelma: " + response.k_aviyonik_sayilari.Kızılelma + " Aviyonik");
+
+                                            $('#tb2-aviyonik-sayisi').addClass(response.new_aviyonik.TB2 < 2 ? 'list-group-item-danger' : (response.new_aviyonik.TB2 < 3 ? 'list-group-item-warning' : ''));
+                                            $('#tb3-aviyonik-sayisi').addClass(response.new_aviyonik.TB3 < 2 ? 'list-group-item-danger' : (response.new_aviyonik.TB3 < 3 ? 'list-group-item-warning' : ''));
+                                            $('#akinci-aviyonik-sayisi').addClass(response.new_aviyonik.Akıncı < 2 ? 'list-group-item-danger' : (response.new_aviyonik.Akıncı < 3 ? 'list-group-item-warning' : ''));
+                                            $('#kizilelma-aviyonik-sayisi').addClass(response.new_aviyonik.Kızılelma < 2 ? 'list-group-item-danger' : (response.new_aviyonik.Kızılelma < 3 ? 'list-group-item-warning' : ''));
+
+                                            loadAviyonikler(data.current_page, ucakAdi);
+
+                                        },
+                                        error: function (xhr, status, error) {
+                                            alert("Silme işlemi sırasında bir hata oluştu.");
+                                        }
+                                    });
+
+                                    $('#deleteConfirmationModal').modal('hide'); // Modal'ı kapat
+                                    kanatId = null;
+                                });
+                            });
+
+
                         }
 
 
