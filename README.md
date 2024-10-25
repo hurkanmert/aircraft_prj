@@ -12,7 +12,6 @@ Bu proje, uçak montajı sürecini yönetmek için geliştirilmiş bir web uygul
     <li><strong>HTML/CSS/JavaScript</strong>: Ön yüz geliştirme için kullanıldı.</li>
     <li><strong>Bootstrap</strong>: Responsive tasarım için kullanılmaktadır.</li>
 </ul>
-
 <h2>Çalışma Prensibi</h2>
 <ol>
     <li>
