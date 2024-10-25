@@ -102,35 +102,57 @@ $(document).ready(function () {
         var kuyrukSerial = $('#kuyruk-serial').text();
         var aviyonikSerial = $('#aviyonik-serial').text();
         var ucakadi = $('#ucak-adi').text();
-        $.ajax({
-            url: create_ucak,
-            type: 'POST',
-            data: {
-                'ucak_adi': ucakadi,
-                'govde_serial': govdeSerial,
-                'kanat_serial': kanatSerial,
-                'kuyruk_serial': kuyrukSerial,
-                'aviyonik_serial': aviyonikSerial,
-                'csrfmiddlewaretoken': csrf_token
-            },
-            success: function (response) {
 
-                $('#myModal2').modal('show'); // Modal'ı göster
+        var count_govde = $('#govde-stock').text();
+        var count_kanat = $('#kanat-stock').text();
+        var count_kuyruk = $('#kuyruk-stock').text();
+        var count_aviyonik = $('#aviyonik-stock').text();
+
+        if (count_govde === "0" || count_kanat === "0" || count_kuyruk === "0" || count_aviyonik === "0"){
+            $('#myModal').modal('show');
 
                 // Modal açıldığında buton tıklama olayını tanımlayın
-                $('#myModal2').on('shown.bs.modal', function () {
+                $('#myModal').on('shown.bs.modal', function () {
                     $('#modalOnay').off('click').on('click', function () { // Eski olay dinleyicilerini kaldır ve yeni bir tane ekle
                         console.log("Modal onaylandı.");
-                        $('#myModal2').modal('hide'); // Modal'ı kapat
+                        $('#myModal').modal('hide'); // Modal'ı kapat
                     });
                 });
+        }
+        else{
+            $.ajax({
+                url: create_ucak,
+                type: 'POST',
+                data: {
+                    'ucak_adi': ucakadi,
+                    'govde_serial': govdeSerial,
+                    'kanat_serial': kanatSerial,
+                    'kuyruk_serial': kuyrukSerial,
+                    'aviyonik_serial': aviyonikSerial,
+                    'csrfmiddlewaretoken': csrf_token
+                },
+                success: function (response) {
+    
+                    $('#myModal2').modal('show'); // Modal'ı göster
+    
+                    // Modal açıldığında buton tıklama olayını tanımlayın
+                    $('#myModal2').on('shown.bs.modal', function () {
+                        $('#modalOnay').off('click').on('click', function () { // Eski olay dinleyicilerini kaldır ve yeni bir tane ekle
+                            console.log("Modal onaylandı.");
+                            $('#myModal2').modal('hide'); // Modal'ı kapat
+                        });
+                    });
+    
+                    // Tüm alanları temizle ve tablonun görünümünü sıfırla
+                    loadParts(ucakadi);
+                },
+                error: function (xhr, status, error) {
+                    alert('Üretim sırasında bir hata oluştu: ' + error);
+                }
+            });
+        }
 
-                // Tüm alanları temizle ve tablonun görünümünü sıfırla
-                loadParts(ucakadi);
-            },
-            error: function (xhr, status, error) {
-                alert('Üretim sırasında bir hata oluştu: ' + error);
-            }
-        });
+
+
     });
 });
