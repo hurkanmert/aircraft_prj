@@ -58,4 +58,15 @@ Bu proje, uçak montajı sürecini yönetmek için geliştirilmiş bir web uygul
     <li><strong>Uygulamaya Erişim:</strong>
         <p>Tarayıcınızda <code>http://localhost:8000/</code> adresine giderek uygulamayı kullanabilirsiniz.</p>
     </li>
+    <li><strong>Kullanıcı Bilgileri:</strong>
+        <ul>
+    <li><strong>hmd</strong>: Montaj</li>
+    <li><strong>ali</strong>: Kuyruk</li>
+    <li><strong>mert</strong>: Aviyonik</li>
+    <li><strong>ahmet</strong>: Gövde</li>
+    <li><strong>hasan</strong>: Kanat</li>
+    <li><strong>veli</strong>: Kuyruk</li>
+    <li><strong>Şifre</strong>: 12345</li>
+    </ul>
+        </li>
 </ol>
