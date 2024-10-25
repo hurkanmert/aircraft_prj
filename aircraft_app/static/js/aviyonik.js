@@ -131,7 +131,7 @@ $(document).ready(function () {
     
                                         $('#tb2-aviyonik-sayisi').addClass(response.new_aviyonik.TB2 < 2 ? 'list-group-item-danger' : (response.new_aviyonik.TB2 < 3 ? 'list-group-item-warning' : ''));
                                         $('#tb3-aviyonik-sayisi').addClass(response.new_aviyonik.TB3 < 2 ? 'list-group-item-danger' : (response.new_aviyonik.TB3 < 3 ? 'list-group-item-warning' : ''));
-                                        $('#akinci-aviyonik-sayisi').addClass(response.new_aviyonik.AkıncıAkıncı < 2 ? 'list-group-item-danger' : (response.new_aviyonik.TB2 < 3 ? 'list-group-item-warning' : ''));
+                                        $('#akinci-aviyonik-sayisi').addClass(response.new_aviyonik.Akıncı < 2 ? 'list-group-item-danger' : (response.new_aviyonik.Akıncı < 3 ? 'list-group-item-warning' : ''));
                                         $('#kizilelma-aviyonik-sayisi').addClass(response.new_aviyonik.Kızılelma < 2 ? 'list-group-item-danger' : (response.new_aviyonik.Kızılelma < 3 ? 'list-group-item-warning' : ''));
                         
                                         loadAviyonikler(data.current_page, ucakAdi);
