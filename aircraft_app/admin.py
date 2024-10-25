@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import Kanat, Govde, Kuyruk, Aviyonik, Ucak
+from .models import Kanat, Govde, Kuyruk, Aviyonik, Ucak, CustomUser
 
 
 # Bu kısımda modelleri yönetim panelinde nasıl görüneceğini ayarlıyoruz. 
@@ -24,3 +24,7 @@ class AviyonikAdmin(admin.ModelAdmin):
 @admin.register(Ucak)
 class UcakAdmin(admin.ModelAdmin):
     list_display = ('ucak_adi', 'seri_numarasi', 'govde_serial', 'kanat_serial', 'aviyonik_serial', 'kuyruk_serial') # Uçak listesinde gösterilecek alanlar.
+
+@admin.register(CustomUser)
+class CustomUserAdmin(admin.ModelAdmin):
+    list_display = ('username', 'role')
