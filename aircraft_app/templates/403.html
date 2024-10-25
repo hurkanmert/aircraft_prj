@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Erişim Engellendi</title>
+    <style>
+        body {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh; /* Sayfanın yüksekliği kadar */
+            margin: 0; /* Varsayılan margin'i kaldır */
+            background-color: #cd5c5c; /* Pastel kırmızı arka plan */
+            font-family: Arial, sans-serif; /* Font ayarı */
+            text-align: center; /* Metin ortalama */
+        }
+
+        .overlay {
+            background-color: rgba(255, 255, 255, 0.5); /* %50 opak beyaz arka plan */
+            padding: 20px; /* İçerik ile kenarlar arasındaki boşluk */
+            border-radius: 10px; /* Kenarları yuvarlak yap */
+        }
+
+        h1 {
+            font-size: 2em; /* Başlık boyutu */
+            color: black; /* Başlık rengi */
+        }
+
+        p {
+            font-size: 1.2em; /* Paragraf boyutu */
+            color: #333; /* Paragraf rengi */
+        }
+    </style>
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            let countdown = 5; // Geri sayım süresi (saniye)
+            const countdownElement = document.getElementById('countdown'); // Geri sayım elemanı
+
+            // Geri sayımı başlat
+            const countdownTimer = setInterval(function() {
+                if (countdown > 0) {
+                    countdownElement.innerText = countdown; // Geri sayım metnini güncelle
+                    countdown--; // Geri sayımı azalt
+                } else {
+                    clearInterval(countdownTimer); // Geri sayım tamamlandığında timer'ı durdur
+                    window.history.back(); // Bir önceki sayfaya git
+                }
+            }, 800); // 1000 ms = 1 saniye
+        });
+    </script>
+</head>
+<body>
+    <div class="overlay">
+        <h1>Erişim Engellendi</h1>
+        <p>Bu sayfaya erişim izniniz yok.</p>
+        <p><span id="countdown">5</span><br>
+        saniye içinde bir önceki sayfaya döneceksiniz...</p>
+    </div>
+</body>
+</html>

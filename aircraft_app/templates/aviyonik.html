@@ -1,0 +1,144 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block title %} Aviyonik Üretim Sayfası {% endblock %}
+{% block main %} Aviyonik Üretim Sayfası {% endblock %}
+{% if request.user.is_authenticated %}
+
+{% block user %} Kullanıcı : {{ request.user.username }} {% endblock %}
+{% block role %} Görev : {{ request.user.role }} {% endblock %}
+
+{% endif %}
+{% block logout %}<button class="btn btn-danger" onclick="logoutUser()">Çıkış</button>{% endblock %}
+
+{% block extra_js %}
+<script>
+    var aviyonikListAjaxUrl = "{% url 'aviyonik_list_ajax' %}";
+    var aviyonikSilAjaxUrl = "{% url 'aviyonik_sil_ajax' %}";
+</script>
+<script src="{% static 'js/aviyonik.js' %}"></script>
+{% endblock %}
+
+
+{% block content %}
+
+<!-- Top Section (Total Count and Production Button) -->
+<div class="row">
+    <div class="col-md-3">
+
+        <h4 style="color:navy;">Kullanılabilir Aviyonik Sayısı</h4>
+        <ul class="list-group">
+            <li id="tb2-aviyonik-sayisi"
+                class="list-group-item {% if aviyonik_sayilari.TB2 < 2 %}list-group-item-danger{% elif aviyonik_sayilari.TB2 < 3 %}list-group-item-warning{% endif %}">
+                TB2: {{ aviyonik_sayilari.TB2 }} Aviyonik</li>
+            <li id="tb3-aviyonik-sayisi"
+                class="list-group-item {% if aviyonik_sayilari.TB3 < 2 %}list-group-item-danger{% elif aviyonik_sayilari.TB3 < 3 %}list-group-item-warning{% endif %}">
+                TB3: {{ aviyonik_sayilari.TB3 }} Aviyonik</li>
+            <li id="akinci-aviyonik-sayisi"
+                class="list-group-item {% if aviyonik_sayilari.Akıncı < 2 %}list-group-item-danger{% elif aviyonik_sayilari.Akıncı < 3 %}list-group-item-warning{% endif %}">
+                Akıncı: {{ aviyonik_sayilari.Akıncı }} Aviyonik</li>
+            <li id="kizilelma-aviyonik-sayisi"
+                class="list-group-item {% if aviyonik_sayilari.Kızılelma < 2 %}list-group-item-danger{% elif aviyonik_sayilari.Kızılelma < 3 %}list-group-item-warning{% endif %}">
+                Kızılelma: {{ aviyonik_sayilari.Kızılelma }} Aviyonik</li>
+        </ul>
+
+    </div>
+
+    <div class="col-md-3">
+        <h4 style="color:darkred;">Kullanılmış Aviyonik Sayısı</h4>
+        <li id="tb2-k-aviyonik-sayisi"
+            class="list-group-item {% if k_aviyonik_sayilari.TB2 < 2 %}list-group-item-danger{% elif k_aviyonik_sayilari.TB2 < 3 %}list-group-item-warning{% endif %}">
+            TB2: {{ k_aviyonik_sayilari.TB2 }} Aviyonik</li>
+        <li id="tb3-k-aviyonik-sayisi"
+            class="list-group-item {% if k_aviyonik_sayilari.TB3 < 2 %}list-group-item-danger{% elif k_aviyonik_sayilari.TB3 < 3 %}list-group-item-warning{% endif %}">
+            TB3: {{ k_aviyonik_sayilari.TB3 }} Aviyonik</li>
+        <li id="akinci-k-aviyonik-sayisi"
+            class="list-group-item {% if k_aviyonik_sayilari.Akıncı < 2 %}list-group-item-danger{% elif k_aviyonik_sayilari.Akıncı < 3 %}list-group-item-warning{% endif %}">
+            Akıncı: {{ k_aviyonik_sayilari.Akıncı }} Aviyonik</li>
+        <li id="kizilelma-k-aviyonik-sayisi"
+            class="list-group-item {% if k_aviyonik_sayilari.Kızılelma < 2 %}list-group-item-danger{% elif k_aviyonik_sayilari.Kızılelma < 3 %}list-group-item-warning{% endif %}">
+            Kızılelma: {{ k_aviyonik_sayilari.Kızılelma }} Aviyonik</li>
+        </ul>
+    </div>
+
+    <div class="col-md-6">
+        <h3>Uçak Seç ve Aviyonik Üret</h3>
+        <form id="aviyonikForm" method="post">
+            {% csrf_token %}
+
+            <div class="form-group">
+                <label for="ucak_adi">Uçak Seçiniz:</label>
+                <select name="ucak_adi" id="ucak_adi" class="form-control">
+                    <option value="TB2">TB2</option>
+                    <option value="TB3">TB3</option>
+                    <option value="Akıncı">Akıncı</option>
+                    <option value="Kızılelma">Kızılelma</option>
+                </select>
+            </div>
+            <button class="btn btn-primary" type="submit">Aviyonik Üret</button>
+        </form>
+
+    </div>
+</div>
+
+<!-- End of Top Section (Total Count and Production Button) -->
+
+
+<hr>
+
+<h2 style="text-align: center; margin-top:20px; margin-bottom:20px;">Uçak Tipine Göre Ürünleri Listele</h2>
+
+
+<!-- Select Plane and Show Info -->
+<div class="card-container">
+    <div class="card" data-ucak="TB2">
+        <img src="{% static 'img/tb2.png' %}" alt="TB2">
+        <h3>TB2</h3>
+    </div>
+    <div class="card" data-ucak="TB3">
+        <img src="{% static 'img/tb3.png' %}" alt="TB3">
+        <h3>TB3</h3>
+    </div>
+    <div class="card" data-ucak="Akıncı">
+        <img src="{% static 'img/akinci.png' %}" alt="Akıncı">
+        <h3>Akıncı</h3>
+    </div>
+    <div class="card" data-ucak="Kızılelma">
+        <img src="{% static 'img/kizilelma.png' %}" alt="Kızılelma">
+        <h3>Kızılelma</h3>
+    </div>
+</div>
+
+
+<div class="row">
+    <div class="col-md-12" style="margin-top: 50px;">
+        <table class="table" id="aviyonikListesi" style="height:490px;">
+            <thead>
+                <tr>
+                    <th>Uçak Adı</th>
+                    <th>Aviyonik Seri Numarası</th>
+                    <th>Üretim Tarihi</th>
+                    <th>Durum</th>
+                    <th>İşlem</th>
+                </tr>
+            </thead>
+
+            <tbody>
+                <!-- Info coming here with AJAX -->
+            </tbody>
+
+        </table>
+    </div>
+
+    <div class="col-md-12">
+        <div id="pagination" class="pagination" style="margin-left:50%; padding-bottom:50px;"></div>
+    </div>
+
+</div>
+<!-- End of Select Plane and Show Info -->
+
+
+{% endblock %}
+
+</body>
+
+</html>

@@ -1,0 +1,47 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}Bilgi{% endblock %}</title>
+    
+    <!-- CSS Files -->
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <link href="{% static 'css/style.css' %}" rel="stylesheet">
+
+    <!-- JS Files-->
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.3/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+   
+    {% block extra_head %}{% endblock %}
+</head>
+
+<body>
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark" style="text-align:center;">
+        <a class="navbar-brand" href="#">{% block main %}Bilgi{% endblock %}</a>
+        <a class="navbar-brand">|</a>
+        <a class="navbar-brand" href="#">{% block user %}Kullanıcı{% endblock %}</a>
+        <a class="navbar-brand">|</a>
+        <a class="navbar-brand" href="#">{% block role %}Görev{% endblock %}</a>
+        <a class="navbar-brand">|</a>
+        <a class="navbar-brand" href="#">{% block logout %}Logout{% endblock %}</a>
+    </nav>
+
+
+    <div class="container mt-4">
+        {% block content %}
+        
+        {% endblock %}
+    </div>
+
+<script>
+    function logoutUser() {
+        window.location.href = "{% url 'logout' %}";
+    }
+</script>
+    {% block extra_js %}{% endblock %}
+</body>
+</html>

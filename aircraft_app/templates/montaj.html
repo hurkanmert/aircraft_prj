@@ -1,0 +1,167 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block title %} Montaj Sayfası {% endblock %}
+{% block main %} Montaj Sayfası {% endblock %}
+{% if request.user.is_authenticated %}
+
+{% block user %} Kullanıcı : {{ request.user.username }} {% endblock %}
+{% block role %} Görev : {{ request.user.role }} {% endblock %}
+
+{% endif %}
+{% block logout %}<button class="btn btn-danger" onclick="logoutUser()">Çıkış</button>{% endblock %}
+
+{% block extra_js %}
+
+<script>
+    var get_ucak_parts = "{% url 'get_ucak_parts' %}";
+    var get_ucak = "{% url 'get_ucak' %}";
+    var create_ucak = "{% url 'create_ucak' %}";
+    var csrf_token = '{{ csrf_token }}';
+</script>
+
+<!-- jQuery yükle -->
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<!-- Bootstrap JS yükle -->
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.bundle.min.js"></script>
+
+
+<script src="{% static 'js/montaj.js' %}"></script>
+
+{% endblock %}
+
+
+{% block content %}
+
+<!-- Bootstrap Modal -->
+<div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="myModalLabel">Uyarı</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                Eksik olan parçalar: <span id="modalEksikParcalar"></span>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Tamam</button>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- Select Plane and Show Info -->
+<h2>Üretim ve Listeleme İçin Uçak Seçin</h2>
+<hr>
+
+<div class="card-container">
+    <div class="card" data-ucak="TB2" id="TB2" onclick="loadParts('TB2')">
+        <img src="{% static 'img/tb2.png' %}" alt="TB2">
+        <h3>TB2</h3>
+    </div>
+    <div class="card" data-ucak="TB3" id="TB3" onclick="loadParts('TB3')">
+        <img src="{% static 'img/tb3.png' %}" alt="TB3">
+        <h3>TB3</h3>
+    </div>
+    <div class="card" data-ucak="Akıncı" id="Akinci" onclick="loadParts('Akıncı')">
+        <img src="{% static 'img/akinci.png' %}" alt="Akıncı">
+        <h3>Akıncı</h3>
+    </div>
+    <div class="card" data-ucak="Kızılelma" id="Kizilelma" onclick="loadParts('Kızılelma')">
+        <img src="{% static 'img/kizilelma.png' %}" alt="Kızılelma">
+        <h3>Kızılelma</h3>
+    </div>
+</div>
+
+<!-- Bootstrap Modal -->
+<div class="modal fade" id="myModal2" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="myModalLabel">Bilgi</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                Uçak Üretimi Başarılı Bir Şekilde Yapıldı. 
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-primary" data-dismiss="modal">Tamam</button>
+            </div>
+        </div>
+    </div>
+</div>
+<form id="montajForm" method="post">
+    {% csrf_token %}
+
+    <!-- Parçaların listeleneceği tablo -->
+    <div id="parca-tablosu" style="margin-top:40px; display: none;">
+        <hr>
+        <h3 id="ucak-adi" style="text-align: center;"></h3>
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>Parça Adı</th>
+                    <th>Seri Numarası</th>
+                    <th>Stok Sayısı</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>Gövde</td>
+                    <td id="govde-serial"></td>
+                    <td id="govde-stock"></td>
+                </tr>
+                <tr>
+                    <td>Kanat</td>
+                    <td id="kanat-serial"></td>
+                    <td id="kanat-stock"></td>
+                </tr>
+                <tr>
+                    <td>Kuyruk</td>
+                    <td id="kuyruk-serial"></td>
+                    <td id="kuyruk-stock"></td>
+                </tr>
+                <tr>
+                    <td>Aviyonik</td>
+                    <td id="aviyonik-serial"></td>
+                    <td id="aviyonik-stock"></td>
+                </tr>
+            </tbody>
+
+        </table>
+
+        <button class="btn btn-primary ucak_uret_btn" type="submit" id="uretimButon">Uçak Üret</button>
+    </div>
+</form>
+
+<div id="ucak-tablosu" style="margin-top:40px; display: none; margin-bottom:100px;">
+    <hr>
+        <h2 style="text-align:center;">Uçak Listesi</h2>
+    
+    <table class="table" id="ucakListesi">
+        <thead>
+            <tr>
+                <th>Uçak Adı</th>
+                <th>Seri Numarası</th>
+                <th>Gövde Seri Numarası</th>
+                <th>Kanat Seri Numarası</th>
+                <th>Kuyruk Seri Numarası</th>
+                <th>Aviyonik Seri Numarası</th>
+                <th>Üretim Tarihi</th>
+            </tr>
+        </thead>
+        <tbody>
+
+        </tbody>
+
+    </table>
+</div>
+
+{% endblock %}
+
+</body>
+
+</html>
