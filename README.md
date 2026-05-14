@@ -1,5 +1,4 @@
-# ✈️ Uçak Montaj Yönetim Sistemi
-### Aircraft Assembly Management System
+# ✈️ Aircraft Assembly Management System
 
 [![Python](https://img.shields.io/badge/Python-3.x-blue?logo=python)](https://python.org)
 [![Django](https://img.shields.io/badge/Django-4.x-green?logo=django)](https://djangoproject.com)
@@ -8,160 +7,155 @@
 
 ---
 
-## 📌 Proje Hakkında / About
+## 📌 About
 
-**TR:** Uçak üretim sürecini uçtan uca yönetmek için geliştirilmiş rol tabanlı web uygulaması. Her kullanıcı rolü yalnızca kendi sorumluluğundaki sayfaya erişebilir; montaj ekibi tüm parçaların hazır olup olmadığını kontrol ederek nihai uçak üretimini gerçekleştirir.
-
-**EN:** A role-based web application for end-to-end aircraft assembly management. Each user role can only access its own production page; the assembly team verifies part availability and performs final aircraft production.
+A role-based web application for end-to-end aircraft assembly management. Each user role can only access its own production page; the assembly team verifies part availability across all components and performs final aircraft production.
 
 ---
 
-## 🚀 Özellikler / Features
+## 🚀 Features
 
-- 🔐 **Rol tabanlı kimlik doğrulama** — 5 farklı kullanıcı rolü: Kanat, Gövde, Kuyruk, Aviyonik, Montaj
-- 🏭 **Parça üretim yönetimi** — Her ekip kendi parça tipini üretir, seri numarası otomatik atanır
-- 🟡🔴 **Stok uyarı sistemi** — Stok 3'ün altında sarı, 2'nin altında kırmızı uyarı
-- ⚙️ **Montaj doğrulama** — Eksik parça varsa üretim engellenir, hangi parça eksik olduğu bildirilir
-- 📋 **Uçak listesi** — Üretilen her uçağın tüm bileşen seri numaraları ve üretim tarihi kayıt altında
-- 🚫 **Sayfa erişim kontrolü** — Yetkisiz erişimde 5 saniyelik geri sayım ile 403 yönlendirmesi
-- 🔄 **AJAX ile gerçek zamanlı güncelleme** — Sayfa yenilenmeden stok sayıları güncellenir
-- 🛠️ **Django Admin** — Tüm modeller ve kullanıcı yönetimi admin panelinden yönetilebilir
+- 🔐 **Role-based authentication** — 5 user roles: Wing, Body, Tail, Avionics, Assembly
+- 🏭 **Part production management** — Each team produces its own part type with auto-assigned serial numbers
+- 🟡🔴 **Stock alert system** — Yellow warning below 3 units, red warning at 0 units
+- ⚙️ **Assembly validation** — Production is blocked if any part is missing; missing parts are reported
+- 📋 **Aircraft registry** — Full component serial numbers and production date recorded for every aircraft
+- 🚫 **Page access control** — Unauthorized access triggers a 5-second countdown and 403 redirect
+- 🔄 **Real-time updates via AJAX** — Stock counts update without page refresh
+- 🛠️ **Django Admin** — All models and user management accessible from the admin panel
 
 ---
 
-## 🖼️ Ekran Görüntüleri / Screenshots
+## 🖼️ Screenshots
 
-### Giriş Sayfası / Login
+### Login
 ![Login](ProjeGoruntu/01_login_page.png)
 
-### Kanat Üretim Sayfası / Wing Production
-![Kanat Üretim](ProjeGoruntu/02_kanat_uretim.png)
+### Wing Production
+![Wing Production](ProjeGoruntu/02_kanat_uretim.png)
 
-### Stok Uyarıları / Stock Warnings
-> Sarı: stok ≤ 3 | Kırmızı: stok = 0
+### Stock Warnings
+> Yellow: stock ≤ 3 | Red: stock = 0
 
-![Stok Uyarı](ProjeGoruntu/03_kanat_uretim.png)
+![Stock Warning](ProjeGoruntu/03_kanat_uretim.png)
 
-### Montaj Sayfası — Parça Kontrolü / Assembly — Parts Check
-![Montaj](ProjeGoruntu/22_montaj.png)
+### Assembly — Parts Check
+![Assembly](ProjeGoruntu/22_montaj.png)
 
-### Montaj Sayfası — Eksik Parça Uyarısı / Missing Part Warning
-![Eksik Parça](ProjeGoruntu/25_montaj.png)
+### Missing Part Warning
+![Missing Part](ProjeGoruntu/25_montaj.png)
 
-### Üretim Başarılı / Production Success
-![Başarılı](ProjeGoruntu/23_montaj.png)
+### Production Success
+![Success](ProjeGoruntu/23_montaj.png)
 
-### Sayfa Erişim Engeli / Access Denied (403)
+### Access Denied (403)
 ![403](ProjeGoruntu/20_sayfa_kontrol.png)
 
-### Django Admin Paneli / Admin Panel
+### Django Admin Panel
 ![Admin](ProjeGoruntu/26_admin.png)
 
 ---
 
-## 🛠️ Teknoloji Yığını / Tech Stack
+## 🛠️ Tech Stack
 
-| Katman | Teknoloji |
-|--------|-----------|
+| Layer | Technology |
+|-------|-----------|
 | Backend | Python, Django, Django REST Framework |
-| Veritabanı | PostgreSQL |
+| Database | PostgreSQL |
 | Frontend | HTML, CSS, JavaScript, Bootstrap |
-| Asenkron | AJAX (sayfa yenilemesiz güncelleme) |
-| Yönetim | Django Admin (özelleştirilmiş) |
+| Async | AJAX (no page reload updates) |
+| Admin | Django Admin (customized) |
 
 ---
 
-## 🏗️ Mimari Kararlar / Architecture Decisions
+## 🏗️ Architecture Decisions
 
-**Django REST Framework** — Parça stok verileri ve montaj işlemleri REST API üzerinden yönetildi. Bu sayede frontend ve backend birbirinden bağımsız çalışır; ileride mobil uygulama veya farklı bir frontend entegre edilebilir.
+**Django REST Framework** — Part stock data and assembly operations are managed through a REST API, decoupling the frontend from the backend. This allows future integration of a mobile app or alternative frontend with minimal changes.
 
-**AJAX ile asenkron güncelleme** — Stok sayılarının her üretim işleminden sonra sayfa yenilenmeden güncellenmesi için AJAX kullanıldı. Kullanıcı deneyimini önemli ölçüde iyileştirir.
+**AJAX for async updates** — Stock counts update after each production action without a full page reload, significantly improving the user experience.
 
-**Custom User Model** — Django'nun varsayılan kullanıcı modeli genişletilerek `role` alanı eklendi. Bu sayede her kullanıcıya bir üretim rolü atanabilir ve view katmanında role göre yetkilendirme yapılır.
+**Custom User Model** — Django's default user model was extended with a `role` field, allowing each user to be assigned a production role and enabling view-level authorization based on that role.
 
-**PostgreSQL** — İlişkisel veri yapısı (uçak → parçalar arası foreign key ilişkileri) ve üretim geçmişi sorguları için PostgreSQL tercih edildi.
+**PostgreSQL** — Chosen for its relational data structure (foreign key relationships between aircraft and parts) and reliable production history queries.
 
 ---
 
-## ⚙️ Kurulum / Installation
+## ⚙️ Installation
 
-### Gereksinimler / Requirements
+### Requirements
 ```bash
 pip install -r requirements.txt
 ```
 
-### Veritabanı Kurulumu / Database Setup
+### Database Setup
 ```bash
-# PostgreSQL'de yeni veritabanı oluşturun
-# settings.py içindeki veritabanı bilgilerini güncelleyin
+# Create a new PostgreSQL database
+# Update database credentials in settings.py
 
 python manage.py migrate
 python manage.py createsuperuser
 ```
 
-### Örnek Veri Yükleme / Load Sample Data
+### Load Sample Data
 ```bash
-# Veritabanı yedeğini yükleyin
-psql -U postgres -d <veritabanı_adı> < backup_db.sql
+psql -U postgres -d <database_name> < backup_db.sql
 ```
 
-### Sunucuyu Başlatın / Run Server
+### Run Server
 ```bash
 python manage.py runserver
 ```
 
-Tarayıcıda açın: `http://localhost:8000/aircraft_app/login/`
+Open in browser: `http://localhost:8000/aircraft_app/login/`
 
 ---
 
-## 👥 Test Kullanıcıları / Test Users
+## 👥 Test Users
 
-| Kullanıcı | Rol | Şifre |
-|-----------|-----|-------|
-| hasan | Kanat | 12345 |
-| veli | Kuyruk | 12345 |
-| ali | Kuyruk | 12345 |
-| ahmet | Gövde | 12345 |
-| mert | Aviyonik | 12345 |
-| hmd | Montaj | 12345 |
+| Username | Role | Password |
+|----------|------|----------|
+| hasan | Wing | 12345 |
+| veli | Tail | 12345 |
+| ali | Tail | 12345 |
+| ahmet | Body | 12345 |
+| mert | Avionics | 12345 |
+| hmd | Assembly | 12345 |
 
-> Admin paneli için superuser oluşturun: `python manage.py createsuperuser`
+> To access the admin panel: `python manage.py createsuperuser`
 
 ---
 
 ## 🔗 API Endpoints
 
-| Endpoint | Metot | Açıklama |
-|----------|-------|----------|
-| `/aircraft_app/login/` | GET/POST | Kullanıcı girişi |
-| `/aircraft_app/kanat/` | GET/POST | Kanat üretim ve listeleme |
-| `/aircraft_app/govde/` | GET/POST | Gövde üretim ve listeleme |
-| `/aircraft_app/kuyruk/` | GET/POST | Kuyruk üretim ve listeleme |
-| `/aircraft_app/aviyonik/` | GET/POST | Aviyonik üretim ve listeleme |
-| `/aircraft_app/montaj/` | GET/POST | Montaj ve uçak üretimi |
-| `/aircraft_app/403/` | GET | Erişim engeli sayfası |
-| `/admin/` | GET | Django admin paneli |
+| Endpoint | Method | Description |
+|----------|--------|-------------|
+| `/aircraft_app/login/` | GET/POST | User login |
+| `/aircraft_app/kanat/` | GET/POST | Wing production & listing |
+| `/aircraft_app/govde/` | GET/POST | Body production & listing |
+| `/aircraft_app/kuyruk/` | GET/POST | Tail production & listing |
+| `/aircraft_app/aviyonik/` | GET/POST | Avionics production & listing |
+| `/aircraft_app/montaj/` | GET/POST | Assembly & aircraft production |
+| `/aircraft_app/403/` | GET | Access denied page |
+| `/admin/` | GET | Django admin panel |
 
 ---
 
-## 📁 Proje Yapısı / Project Structure
+## 📁 Project Structure
 
-```
-aircraft_prj/
-├── aircraft_app/          # Ana uygulama
-│   ├── models.py          # Kanat, Gövde, Kuyruk, Aviyonik, Uçak, Kullanıcı modelleri
-│   ├── views.py           # Rol tabanlı view'lar
-│   ├── serializers.py     # DRF serializer'ları
-│   ├── urls.py            # URL yönlendirmeleri
-│   └── templates/         # HTML şablonları
-├── aircraft_prj/          # Proje ayarları
-│   └── settings.py
-├── backup_db.sql          # Örnek veri
-└── requirements.txt
-```
+    aircraft_prj/
+    ├── aircraft_app/          # Main application
+    │   ├── models.py          # Wing, Body, Tail, Avionics, Aircraft, User models
+    │   ├── views.py           # Role-based views
+    │   ├── serializers.py     # DRF serializers
+    │   ├── urls.py            # URL routing
+    │   └── templates/         # HTML templates
+    ├── aircraft_prj/          # Project settings
+    │   └── settings.py
+    ├── backup_db.sql          # Sample data
+    └── requirements.txt
 
 ---
 
-## 📝 Lisans / License
+## 📝 License
 
-Bu proje açık kaynaklıdır. / This project is open source.
+This project is open source.
